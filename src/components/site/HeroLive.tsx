@@ -16,16 +16,23 @@ const AREAS: Record<AreaId, { tag: string; ini: string; name: string; role: stri
 }
 const ORDER: AreaId[] = ['knee', 'back', 'arm', 'foot']
 const HOTS: Record<AreaId, { x: number; y: number; label: string }> = {
-  back: { x: 410, y: 202, label: 'Спина и шея' },
-  arm: { x: 477, y: 233, label: 'Плечо и кисть' },
-  knee: { x: 390, y: 394, label: 'Колено' },
-  foot: { x: 433, y: 507, label: 'Стопа и пятка' },
+  back: { x: 410, y: 214, label: 'Спина и шея' },
+  arm: { x: 474, y: 231, label: 'Плечо и кисть' },
+  knee: { x: 386, y: 408, label: 'Колено' },
+  foot: { x: 438, y: 514, label: 'Стопа и пятка' },
 }
 const BEAMS: Record<AreaId, string> = {
-  back: 'M410 202 C 385 190, 365 165, 342 150',
-  arm: 'M477 233 C 505 232, 530 224, 558 217',
-  foot: 'M433 507 C 480 507, 520 490, 553 469',
-  knee: 'M390 394 C 355 392, 315 388, 278 384',
+  back: 'M410 214 C 385 196, 365 168, 342 150',
+  arm: 'M474 231 C 505 230, 530 224, 558 217',
+  foot: 'M438 514 C 480 512, 520 492, 553 469',
+  knee: 'M386 408 C 350 404, 315 392, 278 384',
+}
+// Тёплое пятно боли в координатах фигуры (viewBox 200×420)
+const PAIN: Record<AreaId, { x: number; y: number; rx: number; ry: number }> = {
+  back: { x: 100, y: 150, rx: 24, ry: 62 },
+  arm: { x: 152, y: 150, rx: 28, ry: 34 },
+  knee: { x: 80, y: 314, rx: 30, ry: 32 },
+  foot: { x: 122, y: 398, rx: 30, ry: 20 },
 }
 const TITLE = 'Покажите, где болит. Подскажем врача и цену'
 
@@ -187,39 +194,34 @@ export function HeroLive() {
 
                   <svg ref={figRef} className="hl-figure" viewBox="0 0 200 420" aria-hidden="true" fill="none">
                     <defs>
-                      <linearGradient id="hlSkin" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="160" y2="0">
-                        <stop offset="0" stopColor="#B8F2F8" /><stop offset=".45" stopColor="#5CC6D8" /><stop offset="1" stopColor="#177E96" />
-                      </linearGradient>
-                      <linearGradient id="hlSkinDeep" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="160" y2="0">
-                        <stop offset="0" stopColor="#8FE3EE" /><stop offset=".5" stopColor="#3FAFC5" /><stop offset="1" stopColor="#0F5C6E" />
-                      </linearGradient>
-                      <radialGradient id="hlGlow"><stop offset="0" stopColor="#fff" stopOpacity=".75" /><stop offset="1" stopColor="#fff" stopOpacity="0" /></radialGradient>
+                      {/* Половина тела: заливка замкнута по центру, контур — без шва посередине */}
+                      <path id="hlHalfFill" d="M92 56 C92 63 91 67 88 71 C80 75 66 77 58 83 C50 88 47 97 46 107 C44 125 42 143 40 161 C38 177 36 193 35 207 C34 217 33 225 34 233 C35 243 40 247 44 241 C46 233 46 223 47 213 C49 197 52 181 54 167 C56 153 58 141 60 129 C61 141 62 157 64 173 C65 183 63 193 62 205 C60 221 62 241 64 261 C66 281 68 301 70 317 C71 335 70 353 71 369 C72 381 72 389 70 395 C66 401 66 407 74 408 C82 409 88 407 88 401 C88 391 87 381 88 369 C89 351 90 335 90 319 C91 297 94 273 96 251 C97 241 98 235 100 233 L101 233 L101 56 Z" />
+                      <path id="hlHalfEdge" d="M92 56 C92 63 91 67 88 71 C80 75 66 77 58 83 C50 88 47 97 46 107 C44 125 42 143 40 161 C38 177 36 193 35 207 C34 217 33 225 34 233 C35 243 40 247 44 241 C46 233 46 223 47 213 C49 197 52 181 54 167 C56 153 58 141 60 129 C61 141 62 157 64 173 C65 183 63 193 62 205 C60 221 62 241 64 261 C66 281 68 301 70 317 C71 335 70 353 71 369 C72 381 72 389 70 395 C66 401 66 407 74 408 C82 409 88 407 88 401 C88 391 87 381 88 369 C89 351 90 335 90 319 C91 297 94 273 96 251 C97 241 98 235 100 233" />
+                      <radialGradient id="hlPain"><stop offset="0" stopColor="#FF6A3D" stopOpacity=".9" /><stop offset=".5" stopColor="#FF8F63" stopOpacity=".42" /><stop offset="1" stopColor="#FFB38F" stopOpacity="0" /></radialGradient>
                     </defs>
-                    <path d="M88 200 L85 300" stroke="url(#hlSkinDeep)" strokeWidth="28" strokeLinecap="round" />
-                    <path d="M112 200 L115 300" stroke="url(#hlSkinDeep)" strokeWidth="28" strokeLinecap="round" />
-                    <path d="M85 300 L83 384" stroke="url(#hlSkin)" strokeWidth="22" strokeLinecap="round" />
-                    <path d="M115 300 L117 384" stroke="url(#hlSkin)" strokeWidth="22" strokeLinecap="round" />
-                    <ellipse cx="77" cy="394" rx="15" ry="7" fill="url(#hlSkinDeep)" />
-                    <ellipse cx="123" cy="394" rx="15" ry="7" fill="url(#hlSkinDeep)" />
-                    <circle cx="85" cy="300" r="12" fill="url(#hlGlow)" />
-                    <circle cx="115" cy="300" r="12" fill="url(#hlGlow)" />
                     <g className="hl-upper">
-                      <path d="M60 92 C 52 120, 46 140, 44 166 C 42 190, 42 206, 42 224" stroke="url(#hlSkin)" strokeWidth="20" strokeLinecap="round" />
-                      <path d="M140 92 C 148 120, 154 140, 156 166 C 158 190, 158 206, 158 224" stroke="url(#hlSkinDeep)" strokeWidth="20" strokeLinecap="round" />
-                      <circle cx="42" cy="233" r="9" fill="url(#hlSkin)" />
-                      <circle cx="158" cy="233" r="9" fill="url(#hlSkinDeep)" />
-                      <circle cx="44" cy="166" r="9" fill="url(#hlGlow)" />
-                      <circle cx="156" cy="166" r="9" fill="url(#hlGlow)" />
-                      <path d="M62 84 C 78 74, 122 74, 138 84 C 147 90, 148 100, 146 112 L 138 186 C 136 200, 126 206, 114 206 L 86 206 C 74 206, 64 200, 62 186 L 54 112 C 52 100, 53 90, 62 84 Z" fill="url(#hlSkin)" />
-                      <path d="M66 96 C 62 120, 62 150, 66 180" stroke="#fff" strokeWidth="3" strokeLinecap="round" opacity=".45" />
-                      <path d="M84 98 Q100 92 116 98" stroke="#fff" strokeWidth="3" strokeLinecap="round" opacity=".5" />
-                      <g className={`hl-spine${area === 'back' ? ' on' : ''}`}>
-                        {[104, 114, 124, 134, 144, 154, 164, 174, 184, 194].map((y) => <circle key={y} cx="100" cy={y} r="2.6" fill="#fff" opacity=".55" />)}
+                      <use href="#hlHalfFill" fill="#F5FDFE" />
+                      <use href="#hlHalfFill" fill="#F5FDFE" transform="translate(200 0) scale(-1 1)" />
+                      <g key={area} className="hl-pain">
+                        <ellipse cx={PAIN[area].x} cy={PAIN[area].y} rx={PAIN[area].rx} ry={PAIN[area].ry} fill="url(#hlPain)" />
                       </g>
-                      <rect x="92" y="56" width="16" height="20" rx="7" fill="url(#hlSkinDeep)" />
+                      <g stroke="#177E96" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <use href="#hlHalfEdge" />
+                        <use href="#hlHalfEdge" transform="translate(200 0) scale(-1 1)" />
+                      </g>
+                      {/* Рельеф: ключицы, грудь, пресс, паховые линии, колени, икры, локти */}
+                      <g stroke="#177E96" strokeWidth="1.2" strokeLinecap="round" opacity=".42">
+                        {['', 'translate(200 0) scale(-1 1)'].map((t) => (
+                          <path key={t || 'l'} transform={t || undefined} d="M72 84 Q86 88 97 85 M66 104 Q80 118 97 112 M77 128 Q74 160 79 190 M70 202 Q84 213 96 228 M74 311 Q80 304 86 311 Q80 319 74 311 M86 338 Q84 352 86 364 M43 160 Q47 157 52 160" />
+                        ))}
+                        <circle cx="100" cy="178" r="1.6" />
+                      </g>
+                      <path className={`hl-spine${area === 'back' ? ' on' : ''}`} d="M100 90 L100 206" strokeWidth="2" strokeLinecap="round" />
                       <g ref={headRef} className="hl-head">
-                        <circle cx="100" cy="36" r="23" fill="url(#hlSkin)" />
-                        <path d="M86 26 Q92 16 104 15" stroke="#fff" strokeWidth="3" strokeLinecap="round" opacity=".55" />
+                        <rect x="93" y="50" width="14" height="14" fill="#F5FDFE" />
+                        <ellipse cx="100" cy="34" rx="19" ry="23" fill="#F5FDFE" stroke="#177E96" strokeWidth="2.2" />
+                        <path d="M81 32 Q77 36 81 42 M119 32 Q123 36 119 42" stroke="#177E96" strokeWidth="1.6" strokeLinecap="round" />
+                        <path d="M92 56 L92 60 M108 56 L108 60" stroke="#177E96" strokeWidth="2.2" strokeLinecap="round" />
                       </g>
                     </g>
                   </svg>

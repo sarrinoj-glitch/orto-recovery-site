@@ -199,19 +199,22 @@ html { scroll-behavior: smooth; }
 @keyframes hlScan { 0% { top:-130px; opacity:0; } 8% { opacity:1; } 55% { top:600px; opacity:1; } 62%,100% { top:600px; opacity:0; } }
 .hl-floor { position:absolute; left:290px; top:528px; width:240px; height:34px; border-radius:50%; background:radial-gradient(ellipse, rgba(11,61,74,.28), rgba(11,61,74,0) 70%); animation:hlFloor 4s ease-in-out infinite; }
 @keyframes hlFloor { 50% { transform:scaleX(.92); opacity:.8; } }
-.hl-figure { position:absolute; left:290px; top:34px; width:240px; height:504px; overflow:visible; filter:drop-shadow(0 18px 24px rgba(11,61,74,.22)); }
+.hl-figure { position:absolute; left:290px; top:34px; width:240px; height:504px; overflow:visible; filter:drop-shadow(0 14px 22px rgba(11,61,74,.12)); }
 .hl-upper { animation:hlBreathe 4s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%; }
 @keyframes hlBreathe { 50% { transform:translateY(-1.6px) scaleY(1.008); } }
 .hl-head { transform-box:fill-box; transform-origin:50% 100%; transition:transform .35s ease-out; }
-.hl-spine circle { transition:fill .3s ease, opacity .3s ease; }
-.hl-spine.on circle { fill:#F2FF59; opacity:1; }
+.hl-spine { stroke:#177E96; stroke-dasharray:2 6; opacity:.35; transition:stroke .3s ease, opacity .3s ease; }
+.hl-spine.on { stroke:#E2553A; opacity:1; stroke-dasharray:3 5; }
+.hl-pain { transform-box:fill-box; transform-origin:center; animation:hlPainIn .45s ease-out, hlPain 2.4s ease-in-out .45s infinite; }
+@keyframes hlPainIn { from { opacity:0; transform:scale(.5); } }
+@keyframes hlPain { 50% { transform:scale(1.12); opacity:.75; } }
 .hl-hot { position:absolute; width:44px; height:44px; margin:-22px 0 0 -22px; border:0; padding:0; background:transparent; border-radius:50%; cursor:pointer; }
 .hl-hot i { position:absolute; inset:14px; border-radius:50%; background:#fff; border:3px solid #0B3D4A; transition:background .25s ease, transform .25s ease; box-shadow:0 4px 10px -4px rgba(11,61,74,.6); }
 .hl-hot b, .hl-hot em { position:absolute; inset:12px; border-radius:50%; border:2px solid rgba(23,126,150,.55); animation:hlRipple 2.4s ease-out infinite; }
 .hl-hot em { animation-delay:1.2s; }
 .hl-hot:hover i { transform:scale(1.2); }
-.hl-hot.on i { background:#F2FF59; transform:scale(1.25); }
-.hl-hot.on b, .hl-hot.on em { border-color:rgba(242,255,89,.95); border-width:3px; }
+.hl-hot.on i { background:#E2553A; border-color:#fff; transform:scale(1.25); }
+.hl-hot.on b, .hl-hot.on em { border-color:rgba(226,85,58,.7); border-width:3px; }
 @keyframes hlRipple { from { transform:scale(.7); opacity:1; } to { transform:scale(2.3); opacity:0; } }
 .hl-beams path.base { stroke:#177E96; stroke-width:2; stroke-dasharray:5 6; opacity:.55; }
 .hl-beams path.light { stroke:url(#hlBeam); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:26 400; stroke-dashoffset:26; opacity:0; }
@@ -279,3 +282,4 @@ html { scroll-behavior: smooth; }
 .hl-mobile .hl-call, .hl-mobile .hl-doc, .hl-mobile .hl-chat, .hl-mobile .hl-photo, .hl-mobile .hl-hand { display:none; }
 .hl-mobile .hl-hot { transform:scale(1.6); }
 .hl-doc.hl-doc-m { position:relative; left:auto; top:auto; width:auto; margin-top:16px; }
+@media (prefers-reduced-motion: reduce) { .hl-pain { animation:none; } }
