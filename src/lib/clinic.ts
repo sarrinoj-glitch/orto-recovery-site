@@ -27,6 +27,8 @@ export type Doctor = {
   treats: string
   price: string
   chat: string
+  // Портрет из фотосессии 2024 (медиатека старого сайта) — только где имя точно известно
+  photo?: string
 }
 
 export const DOCTORS: Doctor[] = [
@@ -47,7 +49,8 @@ export const DOCTORS: Doctor[] = [
   {
     name: 'Куделя Александр Павлович',
     role: 'Эндоскопист высшей категории, стаж более 30 лет',
-    treats: 'Гастроскопия и колоноскопия, в том числе во сне под седацией',
+    treats: 'Гастроскопия и колоноскопия, в том числе во сне под седацией. Окончил ДГМИ, переподготовка по эндоскопии в ГНЦ колопроктологии (Москва)',
+    photo: asset('/photos/d-kudelya-a.jpg'),
     price: 'от 3 600 ₽',
     chat: 'Здравствуйте, хочу сделать колоноскопию под седацией',
   },
@@ -55,6 +58,7 @@ export const DOCTORS: Doctor[] = [
     name: 'Мусаева Эльмира Ашурбеговна',
     role: 'Инструктор ЛФК, методика СИАС',
     treats: 'Сколиоз и осанка у детей и взрослых, детская ЛФК',
+    photo: asset('/photos/d-musaeva.jpg'),
     price: '2 500 ₽',
     chat: 'Здравствуйте, у ребёнка сколиоз, хочу на ЛФК',
   },
@@ -67,8 +71,9 @@ export const DOCTORS: Doctor[] = [
   },
   {
     name: 'Нажмудинова Айшат Абдурахмановна',
-    role: 'Терапевт-гастроэнтеролог',
-    treats: 'Желудок, кишечник, печень',
+    role: 'Терапевт-гастроэнтеролог, гепатолог',
+    treats: 'Желудок, кишечник, печень. Сеченовский университет, стаж 9 лет',
+    photo: asset('/photos/d-nazhmudinova.jpg'),
     price: '3 000 ₽',
     chat: 'Здравствуйте, хочу записаться к гастроэнтерологу',
   },
@@ -236,11 +241,14 @@ export const PRICE_GROUPS: { title: string; items: { name: string; price: string
   },
 ]
 
+// Экскурсия по центру: фотосессия 2024 из медиатеки старого сайта + ресепшен
 export const PHOTOS = [
   { id: 'reception', image: asset('/photos/reception.jpg'), title: 'Ресепшен', description: 'Здесь вас встретит администратор', alt: 'Стойка администратора с логотипом центра' },
-  { id: 'cabinet', image: asset('/photos/cabinet.jpg'), title: 'Кабинет приёма', description: 'Осмотр ортопеда и невролога', alt: 'Кабинет приёма врача' },
-  { id: 'physio', image: asset('/photos/physio.jpg'), title: 'Физиотерапия', description: 'Электромиостимуляция', alt: 'Аппарат электромиостимуляции в процедурном кабинете' },
-  { id: 'press', image: asset('/photos/press.jpg'), title: 'Прессотерапия', description: 'Аппаратный лимфодренаж', alt: 'Аппарат прессотерапии' },
-  { id: 'room', image: asset('/photos/room.jpg'), title: 'Кабинет ЛФК', description: 'Занятия со взрослыми и детьми', alt: 'Кабинет лечебной физкультуры' },
-  { id: 'corridor', image: asset('/photos/corridor.jpg'), title: 'Первый этаж', description: 'Вход с пандусом', alt: 'Коридор центра' },
+  { id: 'ortho', image: asset('/photos/g-ortho.jpg'), title: 'Кабинет ортопеда', description: 'Осмотр и разбор снимков', alt: 'Травматолог-ортопед за рабочим столом' },
+  { id: 'uvt', image: asset('/photos/c-shoulder.jpg'), title: 'Ударно-волновая терапия', description: 'УВТ — 3 000 ₽', alt: 'Ударно-волновая терапия плеча' },
+  { id: 'magnet', image: asset('/photos/g-magnet.jpg'), title: 'Аппаратная физиотерапия', description: 'Магнит, ультразвук, ток', alt: 'Аппаратная физиотерапия спины' },
+  { id: 'massage', image: asset('/photos/g-massage.jpg'), title: 'Массаж', description: 'Массаж спины — 2 500 ₽', alt: 'Лечебный массаж' },
+  { id: 'lfk', image: asset('/photos/g-lfk.jpg'), title: 'Зал ЛФК', description: 'Занятия со взрослыми и детьми', alt: 'Зал лечебной физкультуры' },
+  { id: 'mri', image: asset('/photos/g-mri.jpg'), title: 'Разбор снимков', description: 'МРТ и рентген — на приёме', alt: 'Врачи разбирают снимок МРТ' },
+  { id: 'endo', image: asset('/photos/g-endo-team.jpg'), title: 'Эндоскопия', description: 'Обследования во сне', alt: 'Команда эндоскопии' },
 ]

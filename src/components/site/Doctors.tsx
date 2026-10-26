@@ -25,9 +25,13 @@ export function Doctors() {
             className="grid gap-3 rounded-2xl border-b border-graphite/10 px-2 py-6 transition-colors hover:bg-ward/70 md:grid-cols-[1.25fr_1.35fr_auto] md:items-center md:gap-8 md:px-4"
           >
             <div className="flex items-center gap-4">
-              <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-lg font-bold ${TONES[i % TONES.length]}`} aria-hidden>
-                {initials(d.name)}
-              </span>
+              {d.photo ? (
+                <img src={d.photo} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover object-[50%_20%]" />
+              ) : (
+                <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-lg font-bold ${TONES[i % TONES.length]}`} aria-hidden>
+                  {initials(d.name)}
+                </span>
+              )}
               <div>
                 <p className="text-xl font-semibold tracking-[-0.01em] text-graphite">{d.name}</p>
                 <p className="mt-1 text-[15px] text-graphite/60">{d.role}</p>

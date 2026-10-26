@@ -14,6 +14,10 @@ import { Procedures } from '@/components/site/Procedures'
 import { HomeVisit } from '@/components/site/HomeVisit'
 import { Footer } from '@/components/site/Footer'
 import { RevealObserver } from '@/components/site/RevealObserver'
+import { Start } from '@/components/site/Start'
+import { Conditions, SecondOpinion, AfterCourse } from '@/components/site/Conditions'
+import { TwinPlans, Glossary, PrpSteps, Whole, Sport } from '@/components/site/Treatment'
+import { WhatsAppPlan, Founders, Guarantees, Stories, Prep } from '@/components/site/Trust'
 import ChatWidget from '@/components/ChatWidget'
 
 export default function HomePage() {
@@ -22,14 +26,28 @@ export default function HomePage() {
       <Header />
       <HeroLive />
       <main>
+        <Start />
         <Reviews />
+        <Conditions />
+        <SecondOpinion />
         <Doctors />
+        <Founders />
+        <TwinPlans />
+        <AfterCourse />
+        <Procedures />
+        <Glossary />
+        <PrpSteps />
+        <Whole />
+        <Sport />
+        <WhatsAppPlan />
         <Endoscopy />
         <Gallery />
-        <Procedures />
         <Prices />
         <Savings />
+        <Guarantees />
+        <Stories />
         <FirstVisit />
+        <Prep />
         <HomeVisit />
         <ForFamily />
         <Faq />
