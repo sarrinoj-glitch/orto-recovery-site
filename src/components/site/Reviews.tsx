@@ -1,7 +1,9 @@
 import { Star } from 'lucide-react'
 import { CLINIC } from '@/lib/clinic'
+import { ProDoctorovWidget } from './ProDoctorov'
 
-// Только оценки со ссылками на площадки: отзывы и благодарности на сайте — нарушение ч. 3 ст. 24 38-ФЗ
+// Сам сайт показывает только оценки со ссылками на площадки (ч. 3 ст. 24 38-ФЗ);
+// отзывы ПроДокторов подгружаются виджетом площадки по кнопке
 export function Reviews() {
   return (
     <section className="bg-lime-soft">
@@ -55,8 +57,9 @@ export function Reviews() {
       </div>
 
       <div className="flex flex-col justify-center gap-4 rounded-[28px] bg-white p-7 shadow-lift">
-        <p className="text-xl font-bold text-deep">Почему на сайте нет отзывов</p>
-        <p className="text-[15px] leading-relaxed text-graphite/70">Мы не публикуем отзывы и благодарности пациентов на своём сайте — так требует закон о рекламе медицинских услуг. Оценки и все отзывы можно прочитать на независимых площадках по ссылкам: их нельзя удалить или изменить.</p>
+        <p className="text-xl font-bold text-deep">Отзывы на ПроДокторов</p>
+        <p className="text-[15px] leading-relaxed text-graphite/70">Мы не публикуем отзывы и благодарности пациентов на своём сайте — так требует закон о рекламе медицинских услуг. Отзывы собирает и проверяет независимая площадка ПроДокторов: клиника не может их удалить или изменить. Виджет загружается с сервера prodoctorov.ru и использует его cookie.</p>
+        <ProDoctorovWidget />
         <p className="text-[13px] text-graphite/50">Рейтинги: 2ГИС и Яндекс Карты, данные на октябрь 2026 года.</p>
       </div>
     </div>
