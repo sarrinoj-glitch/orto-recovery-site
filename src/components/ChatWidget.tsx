@@ -5,11 +5,14 @@ import { MessageCircle, X, ArrowUp } from 'lucide-react'
 import clsx from 'clsx'
 import { demoFetch } from '@/lib/demoApi'
 import { asset } from '@/lib/asset'
+import { PdConsent } from '@/components/site/Consent'
 
 type Msg = { id: string; role: 'client' | 'assistant'; text: string; ts: number }
 
 const GREETING =
-  'Здравствуйте! Я администратор центра «Орто-Рекавери». Напишите, что беспокоит, — подскажу цену и запишу к нужному специалисту.'
+  'Здравствуйте! Я ассистент администратора центра «Орто-Рекавери». Подскажу цену и запишу к нужному специалисту. Достаточно назвать направление — например, «колено» или «спина».'
+// Согласие на обработку ПДн — отдельной отметкой до первого сообщения (ч. 1 ст. 9 152-ФЗ)
+const CONSENT_KEY = 'orto-pd-consent'
 
 // Открыть чат с любого места страницы:
 // window.dispatchEvent(new CustomEvent('open-chat', { detail: { text: 'Болит колено' } }))
@@ -22,7 +25,15 @@ export default function ChatWidget({ channel = 'web' }: { channel?: 'web' | 'wha
   const [messages, setMessages] = useState<Msg[]>([])
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
+  const [consent, setConsent] = useState(false)
+  const [consentErr, setConsentErr] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => { try { setConsent(localStorage.getItem(CONSENT_KEY) === '1') } catch { /* нет хранилища */ } }, [])
+  const giveConsent = (v: boolean) => {
+    setConsent(v); setConsentErr(false)
+    try { v ? localStorage.setItem(CONSENT_KEY, '1') : localStorage.removeItem(CONSENT_KEY) } catch { /* нет хранилища */ }
+  }
 
   const send = useCallback(
     async (raw: string) => {
@@ -47,7 +58,12 @@ export default function ChatWidget({ channel = 'web' }: { channel?: 'web' | 'wha
     const onOpen = (e: Event) => {
       setOpen(true)
       const t = (e as CustomEvent<{ text?: string }>).detail?.text
-      if (t) setTimeout(() => send(t), 350)
+      if (!t) return
+      // без согласия сообщение не отправляем — подставляем в поле, человек отправит сам
+      let ok = false
+      try { ok = localStorage.getItem(CONSENT_KEY) === '1' } catch { /* нет хранилища */ }
+      if (ok) setTimeout(() => send(t), 350)
+      else setText(t)
     }
     window.addEventListener('open-chat', onOpen)
     return () => window.removeEventListener('open-chat', onOpen)
@@ -96,12 +112,14 @@ export default function ChatWidget({ channel = 'web' }: { channel?: 'web' | 'wha
           <div className="flex items-center gap-3 border-b border-graphite/10 px-5 py-4">
             <img src={asset('/logo-dark.png')} alt="" className="h-8 w-auto" />
             <div className="leading-tight">
-              <p className="text-[15px] font-semibold text-graphite">Администратор</p>
-              <p className="text-[13px] text-graphite/60">Отвечает сразу, даже вечером</p>
+              <p className="text-[15px] font-semibold text-graphite">Ассистент администратора</p>
+              <p className="text-[13px] text-graphite/60">Программа для записи, отвечает сразу</p>
             </div>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Закрыть чат" className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-ward text-graphite sm:hidden"><X size={18} /></button>
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-2.5 overflow-y-auto bg-ward px-4 py-5">
+            <p className="rounded-2xl bg-white/70 px-3 py-2 text-[12px] leading-snug text-graphite/60">Ассистент не является врачом, не ставит диагноз и не назначает лечение. Не отправляйте снимки и подробности о здоровье — их врач изучит на приёме. При острой боли или травме звоните 103.</p>
             <Bubble role="assistant" text={GREETING} />
             {messages.map((m) => (
               <Bubble key={m.id} role={m.role} text={m.text} />
@@ -110,12 +128,14 @@ export default function ChatWidget({ channel = 'web' }: { channel?: 'web' | 'wha
           </div>
 
           <form
-            className="flex items-end gap-2 border-t border-graphite/10 bg-white p-3"
+            className="flex flex-wrap items-end gap-2 border-t border-graphite/10 bg-white p-3"
             onSubmit={(e) => {
               e.preventDefault()
+              if (!consent) { setConsentErr(true); return }
               if (!sending) send(text)
             }}
           >
+            {!consent && <div className="w-full pb-1"><PdConsent checked={consent} onChange={giveConsent} error={consentErr} /></div>}
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}

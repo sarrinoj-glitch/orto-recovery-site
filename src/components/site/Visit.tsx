@@ -3,6 +3,7 @@
 import { CLINIC } from '@/lib/clinic'
 import { openChat } from '@/components/ChatWidget'
 import { HandNote } from '@/components/site/Decor'
+import { ConsentFrame } from '@/components/site/Consent'
 
 export function Visit() {
   const tel = CLINIC.phone.replace(/[^\d+]/g, '')
@@ -56,10 +57,10 @@ export function Visit() {
       <div className="relative">
       <HandNote className="-top-10 right-6 z-10 hidden lg:flex" arrow="down-right" color="text-coral">мы здесь, рядом с «Тарнаиром»</HandNote>
       <span className="absolute left-5 top-5 z-10 flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-sm font-semibold text-graphite shadow-lift"><span className="relative flex h-2.5 w-2.5"><span className="pin-pulse absolute inset-0 rounded-full bg-coral" /><span className="relative h-2.5 w-2.5 rounded-full bg-coral" /></span>Проспект Имама Шамиля, 35А</span>
-      <iframe
+      <ConsentFrame
         title="Карта: Орто-Рекавери на проспекте Имама Шамиля, 35А"
         src={CLINIC.mapEmbed}
-        loading="lazy"
+        label="Карта"
         className="h-[360px] w-full rounded-[24px] border-[6px] border-lagoon bg-ward shadow-lift lg:h-full lg:min-h-[440px]"
       />
       </div>

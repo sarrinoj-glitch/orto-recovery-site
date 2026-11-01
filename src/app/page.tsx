@@ -17,8 +17,9 @@ import { RevealObserver } from '@/components/site/RevealObserver'
 import { Start } from '@/components/site/Start'
 import { Conditions, SecondOpinion, AfterCourse } from '@/components/site/Conditions'
 import { TwinPlans, Glossary, PrpSteps, Whole, Sport } from '@/components/site/Treatment'
-import { WhatsAppPlan, Founders, Guarantees, Stories, Prep } from '@/components/site/Trust'
+import { WhatsAppPlan, Founders, Guarantees, Prep } from '@/components/site/Trust'
 import ChatWidget from '@/components/ChatWidget'
+import { CookieBanner } from '@/components/site/Consent'
 
 export default function HomePage() {
   return (
@@ -45,7 +46,6 @@ export default function HomePage() {
         <Prices />
         <Savings />
         <Guarantees />
-        <Stories />
         <FirstVisit />
         <Prep />
         <HomeVisit />
@@ -55,6 +55,7 @@ export default function HomePage() {
       </main>
       <Footer />
       <ChatWidget />
+      <CookieBanner />
       <RevealObserver />
     </div>
   )

@@ -183,6 +183,7 @@ export function HeroLive() {
                 </div>
               </div>
             </div>
+            <p className="mt-4 text-[12px] font-semibold uppercase tracking-[0.04em] text-[#4a5357]">Имеются противопоказания. Необходима консультация специалиста</p>
           </div>
 
           <div>

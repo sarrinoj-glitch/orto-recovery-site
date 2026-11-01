@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { GraduationCap, Play } from 'lucide-react'
 import { openChat } from '@/components/ChatWidget'
 import { asset } from '@/lib/asset'
+import { PdConsent } from '@/components/site/Consent'
 
 const H2 = 'text-[2.1rem] font-extrabold leading-[1.05] tracking-[-0.03em] text-graphite sm:text-5xl'
 
@@ -78,18 +79,19 @@ export function WhatsAppPlan() {
 }
 
 // Основатель и директор (выгрузка старого сайта) + семинары для врачей
-export function Founders() {
+export function Founders({ seminar = true, people: showPeople = true }: { seminar?: boolean; people?: boolean }) {
   const people = [
     { img: '/photos/p-founder.jpg', name: 'Магомеддов Абдулла-Гаджи Абумуслимович', role: 'Основатель проекта «Орто-Рекавери»', need: '2–3 фразы: почему открыли центр и чем он отличается.' },
     { img: '/photos/p-director.jpg', name: 'Хумаров Артур Рамазанович', role: 'Генеральный директор', need: 'Обращение к пациентам — коротко, от первого лица.' },
   ]
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
-      <div data-reveal className="flex items-center gap-4 rounded-3xl bg-lime p-5 sm:px-7">
+      {seminar && <div data-reveal className="flex items-center gap-4 rounded-3xl bg-lime p-5 sm:px-7">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/60"><GraduationCap size={22} /></span>
         <p className="text-[15px] leading-relaxed sm:text-base"><b>Центр учит других врачей.</b> Павел Куделя проводит здесь авторские семинары по сухим иглам для специалистов, в центре проходил семинар KinesioCourse по кинезиотейпированию.</p>
-      </div>
-      <h2 className={`${H2} mt-16`}>Кто за этим стоит</h2>
+      </div>}
+      {showPeople && <>
+      <h2 className={`${H2} ${seminar ? 'mt-16' : ''}`}>Кто за этим стоит</h2>
       <div data-stagger className="mt-8 grid gap-4 lg:grid-cols-2">
         {people.map((p) => (
           <article key={p.name} className="grid grid-cols-[96px_1fr] items-center gap-4 rounded-[28px] bg-white p-4 shadow-soft ring-1 ring-graphite/5 sm:grid-cols-[150px_1fr] sm:gap-6 sm:p-5">
@@ -102,6 +104,7 @@ export function Founders() {
           </article>
         ))}
       </div>
+      </>}
     </section>
   )
 }
@@ -164,6 +167,8 @@ export function Prep() {
   const [phone, setPhone] = useState('')
   const [err, setErr] = useState(false)
   const [sent, setSent] = useState(false)
+  const [pd, setPd] = useState(false)
+  const [pdErr, setPdErr] = useState(false)
 
   useEffect(() => {
     try { const s = JSON.parse(localStorage.getItem('orto-prep') || '[]'); if (Array.isArray(s)) setChecked((c) => c.map((_, i) => !!s[i])) } catch { /* браузер без хранилища */ }
@@ -175,7 +180,9 @@ export function Prep() {
   })
   const submit = (e: FormEvent) => {
     e.preventDefault()
-    if (phone.replace(/\D/g, '').replace(/^[78]/, '').length !== 10) { setErr(true); return }
+    const bad = phone.replace(/\D/g, '').replace(/^[78]/, '').length !== 10
+    setErr(bad); setPdErr(!pd)
+    if (bad || !pd) return
     setSent(true)
   }
 
@@ -209,6 +216,7 @@ export function Prep() {
                 <button type="submit" className="rounded-2xl bg-graphite px-5 py-3.5 font-bold text-lime">Получить</button>
               </div>
               {err && <p className="mt-2 text-sm text-[#8a2b12]">Введите номер телефона — 10 цифр после +7</p>}
+              <div className="mt-3"><PdConsent checked={pd} onChange={(v) => { setPd(v); setPdErr(false) }} error={pdErr} /></div>
             </form>
           )}
         </div>
