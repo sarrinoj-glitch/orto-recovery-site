@@ -61,6 +61,7 @@ export function Visit() {
         title="Карта: Орто-Рекавери на проспекте Имама Шамиля, 35А"
         src={CLINIC.mapEmbed}
         label="Карта"
+        action="Показать карту"
         className="h-[360px] w-full rounded-[24px] border-[6px] border-lagoon bg-ward shadow-lift lg:h-full lg:min-h-[440px]"
       />
       </div>

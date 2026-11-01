@@ -49,14 +49,14 @@ export function CookieBanner() {
 }
 
 // Сторонний iframe: загружается только после согласия или явного нажатия
-export function ConsentFrame({ src, title, className, label }: { src: string; title: string; className?: string; label: string }) {
+export function ConsentFrame({ src, title, className, label, action = 'Показать' }: { src: string; title: string; className?: string; label: string; action?: string }) {
   const { choice } = useCookieChoice()
   const [forced, setForced] = useState(false)
   if (choice === 'all' || forced) return <iframe title={title} src={src} loading="lazy" className={className} />
   return (
     <div className={`flex flex-col items-center justify-center gap-3 p-6 text-center ${className ?? ''}`}>
       <p className="max-w-sm text-[15px] text-graphite/70">{label} загружается с серверов Яндекса и использует их cookie.</p>
-      <button type="button" onClick={() => setForced(true)} className="h-11 rounded-full bg-deep px-5 text-[15px] font-semibold text-white">Показать {label.toLowerCase()}</button>
+      <button type="button" onClick={() => setForced(true)} className="h-11 rounded-full bg-deep px-5 text-[15px] font-semibold text-white">{action}</button>
     </div>
   )
 }
